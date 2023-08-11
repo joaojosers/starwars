@@ -1,6 +1,6 @@
 // src/context/PlanetContext.js
 import React, { useState, useEffect, createContext, ReactNode } from 'react';
-import { Planet } from '../types';
+import { Planet, CombinedFilterType } from '../types';
 
 type PlanetContextValue = {
   planets: Planet[],
@@ -8,6 +8,7 @@ type PlanetContextValue = {
   setFilterText:React.Dispatch<React.SetStateAction<string>>,
   numericFilters: Planet[],
   filterValue: string,
+  combinedFilter: CombinedFilterType[],
   // setNumericFilters:React.Dispatch<React.SetStateAction<Planets[]>>,
   applyNumericFilter: any,
 };
@@ -21,8 +22,10 @@ export function PlanetProvider({ children }: ChildrenProps) {
   const [planets, setPlanets] = useState<Planet[]>([]);
   const [filterText, setFilterText] = useState('');
   const [filterValue, setFilterValue] = useState('');
-  const applyNumericFilter = () => {
-
+  const [combinedFilter, setCombinedFilter] = useState<CombinedFilterType[]>([]);
+  const applyNumericFilter = (selectedColumn, selectedComparison, filterValue) => {
+    setCombinedFilter([{ selectedColumn, selectedComparison, filterValue },
+      ...combinedFilter]);
   };
 
   useEffect(() => {
@@ -64,6 +67,7 @@ export function PlanetProvider({ children }: ChildrenProps) {
         filterText,
         setFilterText,
         filterValue,
+        combinedFilter,
         applyNumericFilter,
       } }
     >

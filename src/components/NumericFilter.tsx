@@ -8,6 +8,9 @@ function NumericFilter() {
   const [selectedComparison, setSelectedComparison] = useState('greaterThan');
   const [filterValue, setFilterValue] = useState(0);
 
+  // const applyNumericFilter = () => {
+  //   setSelectedColumn();
+  // };
   const handleApplyFilter = () => {
     applyNumericFilter(selectedColumn, selectedComparison, filterValue);
   };

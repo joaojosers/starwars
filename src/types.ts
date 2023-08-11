@@ -14,3 +14,8 @@ export type Planet = {
   url: string,
   residents?: [],
 };
+export type CombinedFilterType = {
+  selectedColumn: string,
+  selectedComparison: string,
+  filterValue: number,
+};
