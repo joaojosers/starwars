@@ -4,14 +4,14 @@ import { PlanetContext } from '../context/PlanetContext';
 import { Planet } from '../types';
 
 function Table() {
-  const { planets: Planet, filterText, combinedFilter } = useContext(PlanetContext);
+  const { planets, filterText, combinedFilter } = useContext(PlanetContext);
   const [column, SetColumn] = useState<string[]>([]);
   const [tableData, setTableData] = useState<Planet[]>([]);
 
   useEffect(() => {
-    SetColumn(Object.keys(Planet));
-    setTableData(Object.values(Planet));
-  }, [Planet]);
+    SetColumn(Object.keys(planets));
+    setTableData(Object.values(planets));
+  }, [planets]);
   let filteredPlanets = tableData.filter((elem) => elem.name.includes(filterText));
   combinedFilter.forEach((filter) => {
     const { selectedComparison, filterValue, selectedColumn } = filter;
