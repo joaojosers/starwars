@@ -4,7 +4,7 @@ import { PlanetContext } from '../context/PlanetContext';
 import { Planet } from '../types';
 
 function Table() {
-  const { planets: Planet, filterText } = useContext(PlanetContext);
+  const { planets: Planet, filterText, combinedFilter } = useContext(PlanetContext);
   const [column, SetColumn] = useState<string[]>([]);
   const [tableData, setTableData] = useState<Planet[]>([]);
 
@@ -12,17 +12,23 @@ function Table() {
     SetColumn(Object.keys(Planet));
     setTableData(Object.values(Planet));
   }, [Planet]);
-  console.log({ planets: Planet });
-  // const tableHeaders = Object.keys(planets).filter((key) => key !== 'residents');
-  const planetFilteredByText = tableData.filter((elem) => elem.name.includes(filterText));
+  let filteredPlanets = tableData.filter((elem) => elem.name.includes(filterText));
+  combinedFilter.forEach((filter) => {
+    const { selectedComparison, filterValue, selectedColumn } = filter;
+    filteredPlanets = filteredPlanets.filter((planet) => {
+      const integerSelectedColumn = parseInt(planet[selectedColumn], 10);
+      if (selectedComparison === 'maior que') {
+        return (integerSelectedColumn > filterValue);
+      } if (selectedComparison === 'menor que') {
+        return (integerSelectedColumn < filterValue);
+      }
+      return (integerSelectedColumn === filterValue);
+    });
+  });
+
   return (
-    <table>
+    <table style={ { textAlign: 'center' } }>
       <thead>
-        {/* <tr>
-          {column.map((header) => (
-            <th key={ header }>{header}</th>
-          ))}
-        </tr> */}
         <tr>
           <th>name</th>
           <th>created</th>
@@ -41,26 +47,23 @@ function Table() {
       </thead>
 
       <tbody>
-        {planetFilteredByText.map((Planet) => {
+        {filteredPlanets.map((planet) => {
           return (
-            <>
-              {/* <div>Table</div> */}
-              <tr key={ Planet.name }>
-                <td>{Planet.name}</td>
-                <td>{Planet.created}</td>
-                <td>{Planet.edited}</td>
-                <td>{Planet.rotation_period}</td>
-                <td>{Planet.orbital_period}</td>
-                <td>{Planet.diameter}</td>
-                <td>{Planet.climate}</td>
-                <td>{Planet.gravity}</td>
-                <td>{Planet.terrain}</td>
-                <td>{Planet.surface_water}</td>
-                <td>{Planet.population}</td>
-                <td>{Planet.url}</td>
-                <td>{Planet.name}</td>
-              </tr>
-            </>
+            <tr key={ planet.name }>
+              <td>{planet.name}</td>
+              <td>{planet.created}</td>
+              <td>{planet.edited}</td>
+              <td>{planet.films}</td>
+              <td>{planet.rotation_period}</td>
+              <td>{planet.orbital_period}</td>
+              <td>{planet.diameter}</td>
+              <td>{planet.climate}</td>
+              <td>{planet.gravity}</td>
+              <td>{planet.terrain}</td>
+              <td>{planet.surface_water}</td>
+              <td>{planet.population}</td>
+              <td>{planet.url}</td>
+            </tr>
           );
         })}
       </tbody>
@@ -69,11 +72,3 @@ function Table() {
 }
 
 export default Table;
-
-{ /* <thead>
-        <tr>
-          {column.map((header) => (
-            <th key={ header }>{header}</th>
-          ))}
-        </tr>
-      </thead> */ }
