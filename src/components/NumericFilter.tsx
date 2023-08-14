@@ -3,16 +3,18 @@ import React, { useContext, useState } from 'react';
 import { PlanetContext } from '../context/PlanetContext';
 
 function NumericFilter() {
-  const { applyNumericFilter } = useContext(PlanetContext);
+  const { applyNumericFilter, arrayFilter, setArrayFilter } = useContext(PlanetContext);
   const [selectedColumn, setSelectedColumn] = useState('population');
   const [selectedComparison, setSelectedComparison] = useState('maior que');
   const [filterValue, setFilterValue] = useState(0);
-
   // const applyNumericFilter = () => {
   //   setSelectedColumn();
   // };
   const handleApplyFilter = () => {
     applyNumericFilter(selectedColumn, selectedComparison, parseInt(filterValue, 10));
+    const filteredOptions = arrayFilter.filter((filtro) => filtro !== selectedColumn);
+    setArrayFilter(filteredOptions);
+    setSelectedColumn(filteredOptions[0]);
   };
 
   return (
@@ -22,11 +24,18 @@ function NumericFilter() {
         onChange={ (e) => setSelectedColumn(e.target.value) }
         data-testid="column-filter"
       >
-        <option value="population">population</option>
+        {arrayFilter.map((filtro) => (
+          <option value={ filtro }>{filtro}</option>
+        ))}
+
+        {/* {arrayFilter.filter((filtro) => (
+          filtro !== selectedColumn
+        ))} */}
+        {/* <option value="population">population</option>
         <option value="orbital_period">orbital_period</option>
         <option value="diameter">diameter</option>
         <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        <option value="surface_water">surface_water</option> */}
       </select>
 
       <select
@@ -46,7 +55,11 @@ function NumericFilter() {
         data-testid="value-filter"
       />
 
-      <button onClick={ handleApplyFilter } data-testid="button-filter">
+      <button
+        disabled={ !selectedColumn }
+        onClick={ handleApplyFilter }
+        data-testid="button-filter"
+      >
         Apply Filter
       </button>
     </div>

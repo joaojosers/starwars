@@ -9,7 +9,10 @@ type PlanetContextValue = {
   numericFilters: Planet[],
   filterValue: string,
   combinedFilter: CombinedFilterType[],
+  setCombinedFilter: React.Dispatch<React.SetStateAction<CombinedFilterType[]>>,
   applyNumericFilter: any,
+  arrayFilter: string[],
+  setArrayFilter:React.Dispatch<React.SetStateAction<string[]>>,
 };
 type ChildrenProps = {
   children: ReactNode,
@@ -20,10 +23,13 @@ export const PlanetContext = createContext({} as PlanetContextValue);
 export function PlanetProvider({ children }: ChildrenProps) {
   const [planets, setPlanets] = useState<Planet[]>([]);
   const [filterText, setFilterText] = useState('');
+  const [arrayFilter, setArrayFilter] = useState<string[]>(['population',
+    'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
   const [combinedFilter, setCombinedFilter] = useState<CombinedFilterType[]>([]);
   const applyNumericFilter = (selectedColumn, selectedComparison, filterValue) => {
-    setCombinedFilter([{ selectedColumn, selectedComparison, filterValue },
-      ...combinedFilter]);
+    setCombinedFilter([...combinedFilter,
+      { selectedColumn, selectedComparison, filterValue },
+    ]);
   };
 
   useEffect(() => {
@@ -58,7 +64,10 @@ export function PlanetProvider({ children }: ChildrenProps) {
         filterText,
         setFilterText,
         combinedFilter,
+        setCombinedFilter,
         applyNumericFilter,
+        arrayFilter,
+        setArrayFilter,
       } }
     >
       {children}
