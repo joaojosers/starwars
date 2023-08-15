@@ -3,10 +3,11 @@ import React, { useContext, useState } from 'react';
 import { PlanetContext } from '../context/PlanetContext';
 
 function NumericFilter() {
-  const { applyNumericFilter, arrayFilter, setArrayFilter, combinedFilter, setCombinedFilter } = useContext(PlanetContext);
+  const { applyNumericFilter, arrayFilter, setArrayFilter,
+    combinedFilter, setCombinedFilter } = useContext(PlanetContext);
   const [selectedColumn, setSelectedColumn] = useState('population');
   const [selectedComparison, setSelectedComparison] = useState('maior que');
-  const [filterValue, setFilterValue] = useState(0);
+  const [filterValue, setFilterValue] = useState<string>('0');
   // const applyNumericFilter = () => {
   //   setSelectedColumn();
   // };
@@ -18,8 +19,9 @@ function NumericFilter() {
   };
   const removeNumericFilter = (index: any) => {
     const deleteFilter = combinedFilter[index];
-    combinedFilter.filter((filtro) => filtro
+    const newFilter = combinedFilter.filter((filtro) => filtro
       .selectedColumn !== deleteFilter.selectedColumn);
+    setCombinedFilter(newFilter);
   };
 
   const removeAllNumericFilters = () => {
@@ -35,7 +37,7 @@ function NumericFilter() {
         data-testid="column-filter"
       >
         {arrayFilter.map((filtro) => (
-          <option value={ filtro }>{filtro}</option>
+          <option key={ filtro } value={ filtro }>{filtro}</option>
         ))}
 
       </select>
@@ -68,10 +70,31 @@ function NumericFilter() {
       <button onClick={ removeAllNumericFilters } data-testid="button-remove-filters">
         Remove All Filters
       </button>
-      <button onClick={ removeNumericFilter }>Remove</button>
+      {/* <button onClick={ removeNumericFilter }>Remove</button>  */}
+      {combinedFilter.map((filter, index) => (
+        <div key={ index } data-testid="filter">
+          {/* {combinedFilter.includes(filter.selectedColumn) && ( */}
+          <button onClick={ () => removeNumericFilter(index) }>Remove</button>
+          {/* )} */}
+          {filter.selectedColumn}
+          {' '}
+          {filter.selectedComparison}
+          {' '}
+          {filter.filterValue}
+        </div>
+      ))}
     </div>
 
   );
 }
 
 export default NumericFilter;
+
+// {numericFilters.map((filter, index) => (
+//   <div key={index} data-testid="filter">
+//     {availableColumns.includes(filter.column) && (
+//       <button onClick={() => removeNumericFilter(index)}>Remove</button>
+//     )}
+//     {filter.column} {filter.comparison} {filter.value}
+//   </div>
+// ))}

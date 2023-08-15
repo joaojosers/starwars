@@ -6,8 +6,8 @@ type PlanetContextValue = {
   planets: Planet[],
   filterText: string,
   setFilterText:React.Dispatch<React.SetStateAction<string>>,
-  numericFilters: Planet[],
-  filterValue: string,
+  // numericFilters: Planet[],
+  // filterValue: string,
   combinedFilter: CombinedFilterType[],
   setCombinedFilter: React.Dispatch<React.SetStateAction<CombinedFilterType[]>>,
   applyNumericFilter: any,
@@ -26,7 +26,11 @@ export function PlanetProvider({ children }: ChildrenProps) {
   const [arrayFilter, setArrayFilter] = useState<string[]>(['population',
     'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
   const [combinedFilter, setCombinedFilter] = useState<CombinedFilterType[]>([]);
-  const applyNumericFilter = (selectedColumn, selectedComparison, filterValue) => {
+  const applyNumericFilter = (
+    selectedColumn: any,
+    selectedComparison: any,
+    filterValue: any,
+  ) => {
     setCombinedFilter([...combinedFilter,
       { selectedColumn, selectedComparison, filterValue },
     ]);
@@ -39,9 +43,9 @@ export function PlanetProvider({ children }: ChildrenProps) {
       try {
         const response = await fetch(apiUrl);
 
-        if (!response.ok) {
-          throw new Error('Erro ao buscar planets');
-        }
+        // if (!response.ok) {
+        //   throw new Error('Erro ao buscar planets');
+        // }
 
         const data = await response.json();
         const filteredData = data.results.map((elem: Planet) => {

@@ -15,7 +15,8 @@ export type Planet = {
   residents?: [],
 };
 export type CombinedFilterType = {
-  selectedColumn: string,
+  selectedColumn: 'population' | 'diameter'
+  | 'orbital_period' | 'rotation_period' | 'surface_water',
   selectedComparison: string,
   filterValue: number,
 };

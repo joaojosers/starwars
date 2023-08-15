@@ -12,11 +12,13 @@ function Table() {
     SetColumn(Object.keys(planets));
     setTableData(Object.values(planets));
   }, [planets]);
+
   let filteredPlanets = tableData.filter((elem) => elem.name.includes(filterText));
   combinedFilter.forEach((filter) => {
     const { selectedComparison, filterValue, selectedColumn } = filter;
     filteredPlanets = filteredPlanets.filter((planet) => {
-      const integerSelectedColumn = parseInt(planet[selectedColumn], 10);
+      const integerSelectedColumn = Number(planet[selectedColumn]);
+      console.log({ selectedComparison, integerSelectedColumn, filterValue });
       if (selectedComparison === 'maior que') {
         return (integerSelectedColumn > filterValue);
       } if (selectedComparison === 'menor que') {
@@ -25,15 +27,9 @@ function Table() {
       return (integerSelectedColumn === filterValue);
     });
   });
-  console.log({ combinedFilter });
   return (
     <>
       <p>teste</p>
-      {/* <p>{combinedFilter[0]}</p>
-      <p>{combinedFilter[1]}</p>
-      <p>{combinedFilter[2]}</p>
-      <p>{combinedFilter[3]}</p>
-      <p>{combinedFilter[4]}</p> */}
       <table style={ { textAlign: 'center' } }>
         <thead>
           <tr>

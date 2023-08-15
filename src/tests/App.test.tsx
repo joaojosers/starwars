@@ -1,10 +1,18 @@
-import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import App from '../App';
-import { JSX } from 'react/jsx-runtime';
+import mockData from './mockData';
 import userEvent from '@testing-library/user-event';
 
 describe('testando a aplicação', () => {
+  beforeEach(() => {
+    global.fetch = vi.fn().mockResolvedValue({
+      json: async () => (mockData),
+    });
+    // json: async () => ({
+    //   ...mockData, ok: true,
+    // }),
+  });
     test('renders App component', () => {
       render(<App />);
       const filterText = screen.getByRole('textbox');
@@ -54,45 +62,28 @@ describe('testando a aplicação', () => {
       expect(filterValue).toBeInTheDocument();
       screen.debug();
     });
-  //    test('verifica as funcionalidades da table', async () => {
-  //     render(<App />);
+ 
+  test('renders App component e se o button Filter Value existe', async () => {
+    render(<App />);
+    const view1 = await screen.findByTestId("column-filter");
+    expect(view1).toBeInTheDocument();
+    const view2 = await screen.findByTestId("comparison-filter");
+    expect(view2).toBeInTheDocument();
+    const view3 = await screen.findByTestId("value-filter");
+    expect(view3).toBeInTheDocument();
+    // const view4 = await screen.getByRole('button', {  name: /apply filter/i});
+    // expect(view4).toBeInTheDocument();
+    const applyFiltersBtn = await screen.findByRole('button', {  name: /Apply Filter/i});
+    userEvent.click(applyFiltersBtn);
 
-  //     const placeHolderText = screen.getByPlaceholderText(/filtrar por nome/i)
-  //     expect(placeHolderText).toBeInTheDocument();
-  //     const inputText = screen.getByRole('textbox');
-      
-  //     const filterApply = screen.getByRole('button', {  name: /apply filter/i});
-  //     expect(filterApply).toBeInTheDocument()
-  //     const button = screen.getByRole('button', { name: /apply filter/i});
-  //     await userEvent.type(inputText, 'Hoth');
-     
-  //     await userEvent.click(button);
-      
-      
-  //     const selBox = screen.getByRole('combobox', { name: /population/i });
-      
-  //     await userEvent.type(selBox, 'population');
-  //     expect(button).toBeInTheDocument();
-  // });
+    const removeFiltersBtn = await screen.findByRole('button', {  name: /Remove All Filters/i});
+    userEvent.click(removeFiltersBtn);
+    // expect(removeFiltersBtn).toBeInTheDocument();
+    // const filterValue = await screen.getByDisplayValue(/24/i);
+    // expect(filterValue).toBeInTheDocument();
+    // const filterPop = await screen.getByText(/population maior que 24/i);
+    // expect (filterPop).toBeInTheDocument;
+    // const exhbitBtn =within(view).getByRole('button', {name: /remove/i});
+    // expect(exhbitBtn).toBeInTheDocument();
+  });
 });
-
-
-// test('I am your test', () => {
-//   render(<App />);
-//   const linkElement = screen.getByText(/Hello, App!/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
-
-// beforeEach(() => {
-  //   global.fetch = vi.fn().mockResolvedValue({
-  //     json: async () => (mockData),
-  //   });
-  //   const emailSimulated = 'ninguem@ninguem.com';
-  // });
-  // test('verifica se a tela de filtro de texto funciona corretamente', async () => {
-  //   renderWithRouterAndRedux(
-  //     <App />,
-  //   );
-  //   const filterText = screen.getByRole('textbox');
-  //   expect(filterText).toBeInTheDocument();
-  // });
