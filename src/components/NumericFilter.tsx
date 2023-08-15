@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { PlanetContext } from '../context/PlanetContext';
 
 function NumericFilter() {
-  const { applyNumericFilter, arrayFilter, setArrayFilter } = useContext(PlanetContext);
+  const { applyNumericFilter, arrayFilter, setArrayFilter, combinedFilter, setCombinedFilter } = useContext(PlanetContext);
   const [selectedColumn, setSelectedColumn] = useState('population');
   const [selectedComparison, setSelectedComparison] = useState('maior que');
   const [filterValue, setFilterValue] = useState(0);
@@ -16,8 +16,18 @@ function NumericFilter() {
     setArrayFilter(filteredOptions);
     setSelectedColumn(filteredOptions[0]);
   };
+  const removeNumericFilter = (index: any) => {
+    const deleteFilter = combinedFilter[index];
+    combinedFilter.filter((filtro) => filtro
+      .selectedColumn !== deleteFilter.selectedColumn);
+  };
+
+  const removeAllNumericFilters = () => {
+    setCombinedFilter([]);
+  };
 
   return (
+
     <div>
       <select
         value={ selectedColumn }
@@ -28,14 +38,6 @@ function NumericFilter() {
           <option value={ filtro }>{filtro}</option>
         ))}
 
-        {/* {arrayFilter.filter((filtro) => (
-          filtro !== selectedColumn
-        ))} */}
-        {/* <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option> */}
       </select>
 
       <select
@@ -62,7 +64,13 @@ function NumericFilter() {
       >
         Apply Filter
       </button>
+
+      <button onClick={ removeAllNumericFilters } data-testid="button-remove-filters">
+        Remove All Filters
+      </button>
+      <button onClick={ removeNumericFilter }>Remove</button>
     </div>
+
   );
 }
 

@@ -33,7 +33,7 @@ export function PlanetProvider({ children }: ChildrenProps) {
   };
 
   useEffect(() => {
-    // Fazer a requisição para a API
+  // Fazer a requisição para a API
     const fetchPlanets = async () => {
       const apiUrl = 'https://swapi.dev/api/planets';
       try {
