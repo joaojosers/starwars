@@ -43,10 +43,6 @@ export function PlanetProvider({ children }: ChildrenProps) {
       try {
         const response = await fetch(apiUrl);
 
-        // if (!response.ok) {
-        //   throw new Error('Erro ao buscar planets');
-        // }
-
         const data = await response.json();
         const filteredData = data.results.map((elem: Planet) => {
           delete elem.residents;
